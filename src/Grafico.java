@@ -1,8 +1,5 @@
 
-import java.awt.Image;
 import java.io.File;
-import java.net.URL;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -28,7 +25,7 @@ public class Grafico extends javax.swing.JFrame{
     
     private boolean sonar=false;
     private boolean sonando=true;
-
+    private boolean terminar=false;
     /**
      * Creates new form Grafico
      */
@@ -65,6 +62,7 @@ public class Grafico extends javax.swing.JFrame{
         Progreso = new javax.swing.JProgressBar();
         Foto = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
 
         Texto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -170,6 +168,13 @@ public class Grafico extends javax.swing.JFrame{
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Imagen del Album");
 
+        jButton3.setText("Terminar");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -194,13 +199,16 @@ public class Grafico extends javax.swing.JFrame{
                                         .addComponent(jButton2))))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(Lsonar, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(Progreso, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(Progreso, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(141, 141, 141)
+                        .addComponent(jButton3)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(Foto, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(127, 127, 127)
+                        .addGap(123, 123, 123)
                         .addComponent(jLabel3)))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
@@ -216,15 +224,18 @@ public class Grafico extends javax.swing.JFrame{
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1)
                             .addComponent(jButton2))
-                        .addGap(71, 71, 71)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton3)
+                        .addGap(37, 37, 37)
                         .addComponent(Lsonar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Album, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Foto, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(anno)
@@ -248,6 +259,7 @@ public class Grafico extends javax.swing.JFrame{
         if (sonar && sonando==false){
             //Lsonar.setText("detenido");
             sonar=false;
+            sonando=true;
             jButton2.setText("Reanudar");
             //            anno.setText(Boolean.toString(g.getPosition()));
             g.pause();
@@ -270,7 +282,7 @@ public class Grafico extends javax.swing.JFrame{
         FileNameExtensionFilter filtromp3=new FileNameExtensionFilter("Solo MP3","mp3");
         seleccionar.setFileFilter(filtromp3);
         String ruta;
-
+        terminar=false;
         int seleccionado =seleccionar.showOpenDialog(null);
         try{
             File archivo = seleccionar.getSelectedFile();
@@ -282,7 +294,6 @@ public class Grafico extends javax.swing.JFrame{
         }
         g.setPath(ruta);
         if(sonando){
-
             datos.meta(ruta);
             sonando=false;
             sonar=true;
@@ -292,8 +303,15 @@ public class Grafico extends javax.swing.JFrame{
             JOptionPane.showMessageDialog(null, "la cancion esta sonando");
 
         }
+        
+        
+        try{datos.guardarImagen();}
+        catch(Exception e){
+        
+        }
+        System.out.println(datos.getImagen());
         try{
-            datos.guardarImagen();
+            
             Lsonar.setText("Artista: "+datos.getArtista());
         }catch(Exception e){}
         try{
@@ -309,20 +327,17 @@ public class Grafico extends javax.swing.JFrame{
             
             lDuracion.setText("Duracion: "+Double.toString(datos.getduracion()/60)+" min");
         }catch(Exception e){}
-        try{
-         
-        //String path=datos.getImagen();
-        //URL url=this.getClass().getResource(path);
-        System.out.println(datos.getImagen());
-            //if(datos.getImagen()!=null){
-            
+        try{     
+            if (datos.getImagen()!=null){
         
-            ImageIcon icon =new ImageIcon(datos.getImagen());
-            
-           // Image image = icon.getImage();
+       ImageIcon icon =new ImageIcon(datos.getImagen());        
         Foto.setIcon(icon);
-        //add(Foto);
-        //}
+        icon=null;
+        
+            }
+            else{
+            Foto.setIcon(null);
+            }
         }catch(Exception e){
         }
         new Thread(
@@ -336,7 +351,9 @@ public class Grafico extends javax.swing.JFrame{
                         int segundos=datos.getduracion();
                         //Progreso.setValue(0);
                         while(true){
-
+                            /*if (terminar){
+                                 Progreso.setValue(0);
+                                break;}*/
                             while(sonar==true){
                                 Progreso.setValue((int)i);
 
@@ -344,16 +361,25 @@ public class Grafico extends javax.swing.JFrame{
                                 b++;//sacar la duracion del track en minotos se miltiplica por 60
                                 //System.out.println(Progreso.getValue());
                                 Thread.sleep(1000);
+                                if (terminar){
+                                 Progreso.setValue(0);
+                                return;
+                                //break;
+                                 //Progreso.setValue(0);
+                                 //Progreso.setValue(0);
+                                 // return;
+                                 } 
+                                 
+                                
                                 if(Progreso.getValue()==100){
                                     Progreso.setValue(0);
                                     sonar = false;
                                     sonando=true;
-                                    Thread.interrupted();
+                                    //Thread.interrupted();
                                     break;
                                 }
                                 if(sonar==false) {
                                     break;
-                                 
                                  
                                 }
                             }
@@ -371,6 +397,16 @@ public class Grafico extends javax.swing.JFrame{
             }
         ).start();
     }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        try{
+        sonando=true;
+        sonar=false;
+        Progreso.setValue(0);
+        terminar=true;
+        g.terminar();}
+        catch(Exception e){}
+    }//GEN-LAST:event_jButton3MouseClicked
 
     /**
      * @param args the command line arguments
@@ -420,6 +456,7 @@ public class Grafico extends javax.swing.JFrame{
     private javax.swing.JLabel anno;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

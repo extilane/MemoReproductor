@@ -36,7 +36,10 @@ public void setPath(String path){
     this.path = path;
     //JFileChooser seleccionar = new JFileChooser();
 }
-
+public void terminar(){
+    player.close();
+    player=null;
+}
 public void pause(){
     try{
     stopped = FIS.available();

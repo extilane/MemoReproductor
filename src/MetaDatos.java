@@ -37,34 +37,26 @@ public class MetaDatos
 }
          try{
                 Artista=tag.getFirst(FieldKey.ARTIST);
-                Album=tag.getFirst(FieldKey.ALBUM);
-                Titulo=tag.getFirst(FieldKey.TITLE);
-                year=tag.getFirst(FieldKey.YEAR);
-                genero=tag.getFirst(FieldKey.GENRE);
-                 BPM = tag.getFirst(FieldKey.FBPM);
-                 portada=tag.getFirstArtwork();
+                }catch(KeyNotFoundException e){}
+                try{Album=tag.getFirst(FieldKey.ALBUM);
+                }catch(KeyNotFoundException e){}
+                try{Titulo=tag.getFirst(FieldKey.TITLE);
+                }catch(KeyNotFoundException e){}
+                try{year=tag.getFirst(FieldKey.YEAR);
+                }catch(KeyNotFoundException e){}
+                try{genero=tag.getFirst(FieldKey.GENRE);
+                }catch(KeyNotFoundException e){}
+                 try{BPM = tag.getFirst(FieldKey.FBPM);
+                 }catch(KeyNotFoundException e){}
+                 try{portada=tag.getFirstArtwork();
                  
-        }catch(KeyNotFoundException e){
-        
-        }
+        }catch(KeyNotFoundException e){}
     }
-/*
-        int w = bufferedImage.getWidth();
-        int h = bufferedImage.getHeight();
-        BufferedImage bufim = new BufferedImage(newW, newH, bufferedImage.getType());
-        Graphics2D g = bufim.createGraphics();
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g.drawImage(bufferedImage, 0, 0, newW, newH, 0, 0, w, h, null);
-        g.dispose();
-        return bufim;
-    */
 
     public void guardarImagen(){
-    try{ 
-        
-                
-               InputStream RecibirDatos =new ByteArrayInputStream(portada.getBinaryData());
-               BufferedImage bImageFromConvert = ImageIO.read(RecibirDatos);
+    try{                         
+                InputStream RecibirDatos =new ByteArrayInputStream(portada.getBinaryData());
+                BufferedImage bImageFromConvert = ImageIO.read(RecibirDatos);
                 int w = bImageFromConvert.getWidth();
                 int h = bImageFromConvert.getHeight();
                 BufferedImage bufim = new BufferedImage(300, 300, bImageFromConvert.getType());
@@ -77,10 +69,10 @@ public class MetaDatos
                 
                 ImageIO.write(bufim,"jpg",JPG);
                 
-                return;
+                
         
                 }catch(Exception e){
-                        
+                    this.rutaI=null;    
                 }
     }
     public String getImagen(){
