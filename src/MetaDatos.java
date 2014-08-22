@@ -16,7 +16,7 @@ public class MetaDatos
     private String Artista,Album,Titulo,year,BPM,genero,ruta,rutaI=null;
     private Artwork portada;
     private int duracion;
-    Tag tag;
+    private Tag tag;
     public MetaDatos(){
         
     } 
