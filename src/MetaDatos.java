@@ -68,7 +68,7 @@ public class MetaDatos
                 File JPG=new File(rutaI);
                 
                 ImageIO.write(bufim,"jpg",JPG);
-                
+                //ImageIO.write(bufim,"jpg",new File(rutaI));
                 
         
                 }catch(Exception e){
