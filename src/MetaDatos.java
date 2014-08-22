@@ -65,7 +65,7 @@ public class MetaDatos
                 g.drawImage(bImageFromConvert, 0, 0, 300, 300, 0, 0, w, h, null);
                 g.dispose();
                 rutaI=ruta+".jpg";
-                File JPG=new File(ruta+".jpg");
+                File JPG=new File(rutaI);
                 
                 ImageIO.write(bufim,"jpg",JPG);
                 
